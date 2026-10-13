@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ELEMENTA | Advanced Interactive Periodic Table of Elements</title>
+  <meta name="description" content="Explore all 118 chemical elements with interactive 18-column grid, dynamic temperature phase simulation, property heatmaps, animated SVG Bohr atomic models, and side-by-side element comparison.">
+  <meta name="keywords" content="periodic table, chemistry, chemical elements, Bohr model, IUPAC, interactive periodic table, science education">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/periodic-table.css">
+  <link rel="stylesheet" href="css/element-details.css">
+  <link rel="stylesheet" href="css/compare.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <header class="site-header" id="site-header">
+    <div class="container header-container">
+      <a href="#table" class="brand" title="ELEMENTA - Periodic Table of the Elements">
+        <div class="brand-icon-wrapper">
+          <i class="fas fa-atom fa-lg"></i>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">ELEMENTA</span>
+          <span class="brand-tagline">Scientific Periodic Table</span>
+        </div>
+      </a>
+
+      <div class="search-control-container">
+        <div class="search-input-wrapper">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" id="global-search-input" class="global-search-input"
+            placeholder="Search by name, symbol, or # (e.g. Au, Gold, 79)..."
+            aria-label="Search chemical elements" autocomplete="off">
+          <button type="button" id="search-clear-btn" class="search-clear-btn" aria-label="Clear search">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div id="search-results-dropdown" class="search-results-dropdown"></div>
+      </div>
+
+      <nav class="main-nav" id="main-nav">
+        <a href="#table" class="nav-link active" data-nav="table">
+          <i class="fas fa-table-cells"></i> Periodic Table
+        </a>
+        <a href="#compare" class="nav-link" data-nav="compare">
+          <i class="fas fa-code-compare"></i> Compare
+        </a>
+        <a href="#details?z=1" class="nav-link" data-nav="details">
+          <i class="fas fa-circle-info"></i> Element Details
+        </a>
+      </nav>
+
+      <div class="header-actions">
+        <button type="button" id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle theme">
+          <i class="fas fa-sun"></i>
+        </button>
+        <button type="button" id="mobile-nav-toggle" class="mobile-nav-toggle" aria-label="Toggle navigation menu">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="view-table" class="view-section">
+
+    <section class="hero-compact">
+      <div class="container hero-content">
+        <div class="hero-text-col">
+          <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            <span>IUPAC 2024 Scientific Standard</span>
+          </div>
+          <h1 class="hero-title">
+            The Interactive <span class="hero-title-gradient">Periodic Table</span>
+          </h1>
+          <p class="hero-subtitle">
+            Explore all 118 chemical elements with real-time thermodynamic state modeling, property heatmaps, quantum electron shells, and multi-element matrix comparison.
+          </p>
+        </div>
+        <div class="hero-actions-col">
+          <div class="stat-pill">
+            <span class="stat-pill-num">118</span>
+            <span class="stat-pill-label">Elements<br>Documented</span>
+          </div>
+          <div class="stat-pill">
+            <span class="stat-pill-num" id="count-solid">94</span>
+            <span class="stat-pill-label">Solids<br>at 20°C</span>
+          </div>
+          <div class="stat-pill">
+            <span class="stat-pill-num" id="count-liquid">2</span>
+            <span class="stat-pill-label">Liquids<br>(Hg, Br)</span>
+          </div>
+          <div class="stat-pill">
+            <span class="stat-pill-num" id="count-gas">11</span>
+            <span class="stat-pill-label">Gases<br>at STP</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="table-section">
+      <div class="container">
+
+        <div class="table-controls-bar">
+
+          <div class="table-controls-left">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="font-weight:700;font-size:0.85rem;color:var(--text-primary);"><i class="fas fa-temperature-three-quarters" style="color:var(--accent-secondary);margin-right:4px;"></i> Temperature:</span>
+              <span id="temp-value-kelvin" style="font-family:var(--font-mono);font-weight:700;color:var(--accent-secondary);font-size:0.95rem;">293 K</span>
+              <span id="temp-value-celsius" style="font-family:var(--font-mono);font-size:0.8rem;color:var(--text-muted);">(20 °C)</span>
+              <span id="temp-value-fahrenheit" style="font-family:var(--font-mono);font-size:0.8rem;color:var(--text-muted);">(68 °F)</span>
+            </div>
+
+            <div style="display:flex;align-items:center;gap:8px;">
+              <input type="range" id="temperature-slider" min="0" max="6000" step="10" value="293"
+                style="width:160px;cursor:pointer;accent-color:var(--accent-primary);" aria-label="Temperature in Kelvin">
+            </div>
+
+            <div style="display:flex;gap:4px;">
+              <button type="button" id="temp-preset-0k" class="btn btn-secondary btn-sm" title="Absolute Zero (0 K)">0 K</button>
+              <button type="button" id="temp-preset-room" class="btn btn-secondary btn-sm" title="Room Temperature (293 K / 20 °C)">293 K</button>
+              <button type="button" id="temp-preset-water-boil" class="btn btn-secondary btn-sm" title="Boiling Water (373 K / 100 °C)">373 K</button>
+              <button type="button" id="temp-preset-hot" class="btn btn-secondary btn-sm" title="High Heat (2500 K)">2500 K</button>
+            </div>
+          </div>
+
+          <div class="table-controls-right">
+
+            <div style="display:flex;align-items:center;gap:6px;">
+              <label for="heatmap-property-select" style="font-size:0.85rem;font-weight:600;color:var(--text-secondary);">
+                <i class="fas fa-fire-flame-curved" style="color:var(--accent-metallic);margin-right:4px;"></i> Heatmap:
+              </label>
+              <select id="heatmap-property-select" class="btn btn-secondary btn-sm" style="background:var(--bg-secondary);color:var(--text-primary);border-radius:var(--radius-sm);padding:0.4rem 0.6rem;">
+                <option value="">None (Standard View)</option>
+                <option value="electronegativity">Electronegativity</option>
+                <option value="atomicRadius">Atomic Radius</option>
+                <option value="ionizationEnergy">Ionization Energy</option>
+                <option value="density">Density</option>
+                <option value="meltingPoint">Melting Point</option>
+                <option value="boilingPoint">Boiling Point</option>
+                <option value="atomicWeight">Atomic Weight</option>
+              </select>
+            </div>
+
+            <button type="button" id="filter-toggle-btn" class="filter-toggle-btn" aria-label="Toggle advanced filters">
+              <i class="fas fa-sliders"></i> Filters
+            </button>
+          </div>
+        </div>
+
+        <div id="filter-panel-collapsible" class="filter-panel-collapsible">
+          <div class="filter-grid">
+
+            <div>
+              <div class="filter-group-title">Physical State</div>
+              <div class="filter-pills-row">
+                <button type="button" class="filter-pill" data-filter-type="state" data-filter-value="solid">Solid</button>
+                <button type="button" class="filter-pill" data-filter-type="state" data-filter-value="liquid">Liquid</button>
+                <button type="button" class="filter-pill" data-filter-type="state" data-filter-value="gas">Gas</button>
+              </div>
+            </div>
+
+            <div>
+              <div class="filter-group-title">Orbital Block</div>
+              <div class="filter-pills-row">
+                <button type="button" class="filter-pill" data-filter-type="block" data-filter-value="s">s-block</button>
+                <button type="button" class="filter-pill" data-filter-type="block" data-filter-value="p">p-block</button>
+                <button type="button" class="filter-pill" data-filter-type="block" data-filter-value="d">d-block</button>
+                <button type="button" class="filter-pill" data-filter-type="block" data-filter-value="f">f-block</button>
+              </div>
+            </div>
+
+            <div>
+              <div class="filter-group-title">Period (Row)</div>
+              <div class="filter-pills-row">
+                <button type="button" class="filter-pill" data-filter-type="period" data-filter-value="1">1</button>
+                <button type="button" class="filter-pill" data-filter-type="period" data-filter-value="2">2</button>
+                <button type="button" class="filter-pill" data-filter-type="period" data-filter-value="3">3</button>
+                <button type="button" class="filter-pill" data-filter-type="period" data-filter-value="4">4</button>
+                <button type="button" class="filter-pill" data-filter-type="period" data-filter-value="5">5</button>
+                <button type="button" class="filter-pill" data-filter-type="period" data-filter-value="6">6</button>
+                <button type="button" class="filter-pill" data-filter-type="period" data-filter-value="7">7</button>
+              </div>
+            </div>
+
+            <div class="filter-summary-bar" style="grid-column: 1 / -1;">
+              <span id="filter-results-counter">Showing 118 of 118 elements</span>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="window.app.tableController.resetFilters()">
+                <i class="fas fa-rotate-left"></i> Reset All Filters
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="heatmap-legend-container" class="heatmap-legend-container">
+          <div class="heatmap-title-box">
+            <span class="heatmap-property-name">Electronegativity</span>
+            <span class="heatmap-property-unit">(Pauling scale)</span>
+          </div>
+          <div class="heatmap-gradient-wrapper">
+            <div class="heatmap-labels">
+              <span id="heatmap-min-label">Low</span>
+              <span>Median</span>
+              <span id="heatmap-max-label">High</span>
+            </div>
+            <div class="heatmap-gradient-bar"></div>
+          </div>
+          <div class="heatmap-na-indicator">
+            <span class="heatmap-na-swatch"></span>
+            <span>Unavailable / Unknown</span>
+          </div>
+        </div>
+
+        <div class="periodic-table-wrapper" id="periodic-table-wrapper">
+          <div class="periodic-table-grid" id="periodic-table-grid" role="grid" aria-label="Periodic Table of Elements">
+
+          </div>
+        </div>
+
+        <div class="category-legend">
+          <div class="legend-title">
+            <i class="fas fa-layer-group"></i> Categories:
+          </div>
+          <div id="category-legend-list" style="display:flex;flex-wrap:wrap;gap:6px;">
+
+          </div>
+          <button type="button" id="legend-reset-btn" class="legend-reset-btn" title="Reset category highlights">
+            <i class="fas fa-filter-circle-xmark"></i> Clear Filter
+          </button>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <main id="view-details" class="view-section" style="display:none;">
+    <section class="element-page-main">
+      <div class="container">
+
+        <div class="detail-nav-bar">
+          <div class="detail-nav-left">
+            <a href="#table" class="back-to-table-btn">
+              <i class="fas fa-arrow-left"></i> Back to Periodic Table
+            </a>
+            <div class="element-pagination">
+              <button type="button" id="detail-prev-btn" class="page-nav-btn" aria-label="Previous element">
+                &larr; Prev
+              </button>
+              <button type="button" id="detail-next-btn" class="page-nav-btn" aria-label="Next element">
+                Next &rarr;
+              </button>
+            </div>
+          </div>
+          <div class="detail-actions-right">
+            <a href="#compare" class="btn btn-secondary btn-sm">
+              <i class="fas fa-code-compare"></i> Compare in Matrix
+            </a>
+          </div>
+        </div>
+
+        <div class="element-hero" id="element-hero-banner">
+
+          <div class="hero-symbol-card">
+            <div class="hero-card-number" id="hero-card-number">1</div>
+            <div class="hero-card-symbol" id="hero-card-symbol">H</div>
+            <div class="hero-card-mass" id="hero-card-mass">1.008</div>
+          </div>
+
+          <div class="hero-info-content">
+            <div class="hero-badge-row">
+              <span class="category-tag" id="hero-category-tag">Reactive Nonmetal</span>
+              <span class="state-tag" id="hero-state-tag">Phase: GAS</span>
+            </div>
+            <h1 class="hero-element-title" id="hero-element-title">Hydrogen (H)</h1>
+            <p class="hero-origin-desc" id="hero-origin-desc">
+              Greek 'hydro' (water) and 'genes' (creator), named by Antoine Lavoisier in 1783.
+            </p>
+          </div>
+
+          <div class="hero-quick-stats">
+            <div class="quick-stat-item">
+              <span class="quick-stat-lbl">Period</span>
+              <span class="quick-stat-val" id="stat-quick-period">1</span>
+            </div>
+            <div class="quick-stat-item">
+              <span class="quick-stat-lbl">Group</span>
+              <span class="quick-stat-val" id="stat-quick-group">1</span>
+            </div>
+            <div class="quick-stat-item">
+              <span class="quick-stat-lbl">Block</span>
+              <span class="quick-stat-val" id="stat-quick-block">s-block</span>
+            </div>
+            <div class="quick-stat-item">
+              <span class="quick-stat-lbl">Configuration</span>
+              <span class="quick-stat-val" id="stat-quick-config">1s¹</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="atomic-model-wrapper">
+          <div class="atomic-model-header">
+            <div class="model-title">
+              <i class="fas fa-atom" style="color:var(--accent-cyan);"></i>
+              <span>Interactive Bohr Atomic Simulation</span>
+            </div>
+            <div class="model-controls">
+              <button type="button" id="bohr-play-pause-btn" class="model-ctrl-btn">
+                <i class="fas fa-pause"></i> Pause
+              </button>
+            </div>
+          </div>
+
+          <div class="bohr-svg-container" id="bohr-model-container">
+
+          </div>
+
+          <div class="model-shell-pills" id="bohr-shell-pills-container">
+
+          </div>
+          <div class="model-disclaimer">
+            Concentric quantum shells visualized using Bohr's planetary atomic model. Protons (p⁺) and neutrons (n⁰) computed for the standard natural isotope.
+          </div>
+        </div>
+
+        <div class="detail-tabs-bar">
+          <button type="button" class="detail-tab-btn active" data-tab="tab-overview">
+            <i class="fas fa-book-open"></i> Overview & History
+          </button>
+          <button type="button" class="detail-tab-btn" data-tab="tab-physical">
+            <i class="fas fa-flask"></i> Physical & Thermal
+          </button>
+          <button type="button" class="detail-tab-btn" data-tab="tab-atomic">
+            <i class="fas fa-circle-nodes"></i> Atomic & Orbital
+          </button>
+          <button type="button" class="detail-tab-btn" data-tab="tab-isotopes">
+            <i class="fas fa-radiation"></i> Isotopes & Sources
+          </button>
+        </div>
+
+        <div class="tab-panel active" id="tab-overview">
+          <div class="detail-grid">
+
+            <div class="info-card">
+              <div class="info-card-header">
+                <span class="info-card-title"><i class="fas fa-clock-rotate-left"></i> Discovery & Naming</span>
+              </div>
+              <div class="info-prop-list">
+                <div class="info-prop-row">
+                  <span class="prop-lbl">Discoverer</span>
+                  <span class="prop-val" id="prop-discoverer">Henry Cavendish</span>
+                </div>
+                <div class="info-prop-row">
+                  <span class="prop-lbl">Year of Discovery</span>
+                  <span class="prop-val" id="prop-discovery-year">1766</span>
+                </div>
+                <div class="info-prop-row">
+                  <span class="prop-lbl">Etymology / Name Origin</span>
+                  <span class="prop-val" id="prop-name-origin">Greek 'hydro' + 'genes'</span>
+                </div>
+                <div class="info-prop-row">
+                  <span class="prop-lbl">Natural Occurrence</span>
+                  <span class="prop-val" id="prop-occurrence">PRIMORDIAL</span>
+                </div>
+                <div class="info-prop-row">
+                  <span class="prop-lbl">CAS Registry Number</span>
+                  <span class="prop-val" id="prop-cas">1333-74-0</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card-header">
+                <span class="info-card-title"><i class="fas fa-industry"></i> Industrial & Modern Uses</span>
+              </div>
+              <ul id="detail-uses-list" style="list-style:none;display:flex;flex-direction:column;gap:10px;color:var(--text-secondary);font-size:0.9rem;">
+
+              </ul>
+            </div>
+
+            <div class="info-card" style="grid-column: 1 / -1;">
+              <div class="info-card-header">
+                <span class="info-card-title"><i class="fas fa-star" style="color:var(--accent-gold);"></i> Verified Scientific Facts</span>
+              </div>
+              <ul class="facts-list" id="detail-facts-list">
+
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="tab-physical">
+          <div class="detail-grid">
+            <div class="info-card">
+              <div class="info-card-header">
+                <span class="info-card-title"><i class="fas fa-temperature-arrow-up"></i> Thermal Phase Transitions</span>
+              </div>
+              <div class="info-prop-list">
+                <div class="info-prop-row">
+                  <span class="prop-lbl">Melting Point (Kelvin)</span>
+                  <span class="prop-val" id="prop-melting-k">14.01 K</span>
+                </div>
+                <div class="info-prop-row">
+                  <span class="prop-lbl">Melting Point (Celsius)</span>
+                  <span class="prop-val" id="prop-melting-c">-259.14 °C</span>
+                </div>
+                <div class="info-prop-row">
+                  <span class="prop-lbl">Melting Point (Fahrenheit)</span>
+                  <span class="prop-val" id="prop-melting-f">-434.45 °F</span>
+                </div>
+                <div class="info-prop-row">
+                  <span class="prop-lbl">Boiling Point (Kelvin)</span>
+                  <span class="prop-val" id="prop-boiling-k">20.28 K</span>
+                </div>
+                <div class="info-prop-row">
+                  <span class="prop-lbl">Boiling Point (Celsius)</span>
+                  <span class="prop-val" id="prop-boiling-c">-252.87 °C</span>
+                </div>
+                <div class="info-prop-row">
+                  <span class="prop-lbl">Boiling Point (Fahrenheit)</span>
+                  <span class="prop-val" id="prop-boiling-f">-423.17 °F</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card-header">
+                <span class="info-card-title"><i class="fas fa-weight-hanging"></i> Bulk & Physical Properties</span>
+              </div>
+              <div class="info-prop-list">
+                <div class="info-prop-row">
+                  <span class="prop-lbl">Density at STP</span>
+                  <span class="prop-val" id="prop-density">0.00008988 g/cm³</span>
+                </div>
+                <div class="info-prop-row">
+                  <span class="prop-lbl">Standard Phase at 298 K</span>
+                  <span class="prop-val" id="prop-phase-stp">GAS</span>
+                </div>
+                <div class="info-prop-row">
+                  <span class="prop-lbl">Radioactivity</span>
+                  <span class="prop-val" id="prop-radioactive">Stable Primordial</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="tab-atomic">
+          <div class="detail-grid">
+            <div class="info-card">
+              <div class="info-card-header">
+                <span class="info-card-title"><i class="fas fa-magnet"></i> Electronic & Quantum Properties</span>
+              </div>
+              <div class="info-prop-list">
+                <div class="info-prop-row">
+                  <span class="prop-lbl">Electronegativity (Pauling)</span>
+                  <span class="prop-val" id="prop-electronegativity">2.20</span>
+                </div>
+                <div class="info-prop-row">
+                  <span class="prop-lbl">Atomic Radius (Empirical)</span>
+                  <span class="prop-val" id="prop-atomic-radius">53 pm</span>
+                </div>
+                <div class="info-prop-row">
+                  <span class="prop-lbl">1st Ionization Energy</span>
+                  <span class="prop-val" id="prop-ionization-energy">1312 kJ/mol</span>
+                </div>
+                <div class="info-prop-row">
+                  <span class="prop-lbl">Common Oxidation States</span>
+                  <span class="prop-val" id="prop-oxidation-states">+1, -1</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card-header">
+                <span class="info-card-title"><i class="fas fa-circle-dot"></i> Electron Configuration</span>
+              </div>
+              <div class="info-prop-list">
+                <div class="info-prop-row">
+                  <span class="prop-lbl">Condensed Orbital Notation</span>
+                  <span class="prop-val" id="prop-electron-config">1s¹</span>
+                </div>
+                <div class="info-prop-row">
+                  <span class="prop-lbl">Electrons per Shell</span>
+                  <span class="prop-val" id="prop-shell-electrons">1</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="tab-isotopes">
+          <div class="detail-grid">
+            <div class="info-card" style="grid-column: 1 / -1;">
+              <div class="info-card-header">
+                <span class="info-card-title"><i class="fas fa-dna"></i> Naturally Occurring & Key Isotopes</span>
+              </div>
+              <div style="overflow-x:auto;">
+                <table class="isotopes-table">
+                  <thead>
+                    <tr>
+                      <th>Isotope</th>
+                      <th>Neutrons (n⁰)</th>
+                      <th>Natural Abundance</th>
+                      <th>Nuclear Stability / Half-life</th>
+                    </tr>
+                  </thead>
+                  <tbody id="isotopes-table-body">
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="info-card" style="grid-column: 1 / -1;">
+              <div class="info-card-header">
+                <span class="info-card-title"><i class="fas fa-certificate"></i> IUPAC Measurement Confidence</span>
+              </div>
+              <div style="display:flex;gap:1.5rem;flex-wrap:wrap;font-size:0.85rem;">
+                <div>Melting Point: <span id="conf-melting" class="confidence-tag measured">measured</span></div>
+                <div>Boiling Point: <span id="conf-boiling" class="confidence-tag measured">measured</span></div>
+                <div>Density: <span id="conf-density" class="confidence-tag measured">measured</span></div>
+                <div>Electronegativity: <span id="conf-electroneg" class="confidence-tag reference">reference</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <section class="related-section">
+          <h2 class="related-title">Related Group & Period Elements</h2>
+          <div class="related-grid" id="related-elements-grid">
+
+          </div>
+        </section>
+
+      </div>
+    </section>
+  </main>
+
+  <main id="view-compare" class="view-section" style="display:none;">
+    <section class="compare-page-main">
+      <div class="container">
+
+        <div class="compare-header">
+          <h1 class="compare-title">Multi-Element <span class="hero-title-gradient">Comparison Matrix</span></h1>
+          <p class="compare-subtitle">
+            Compare up to 3 chemical elements side-by-side with normalized comparative visualization bars across atomic, physical, and thermodynamic dimensions.
+          </p>
+
+          <div class="presets-bar">
+            <span style="font-size:0.8rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;">Quick Presets:</span>
+            <button type="button" id="preset-coinage" class="preset-btn">Coinage Metals (Cu, Ag, Au)</button>
+            <button type="button" id="preset-alkali" class="preset-btn">Alkali Metals (Li, Na, K)</button>
+            <button type="button" id="preset-halogens" class="preset-btn">Halogens (F, Cl, Br)</button>
+            <button type="button" id="preset-semiconductors" class="preset-btn">Semiconductors (Si, Ge, Sn)</button>
+            <button type="button" id="preset-refractory" class="preset-btn">Refractory Metals (Ta, W, Re)</button>
+          </div>
+        </div>
+
+        <div class="selector-panel">
+
+          <div class="slot-card" id="slot-card-0">
+            <div class="slot-header">
+              <span class="slot-title">Element Slot 1</span>
+              <button type="button" class="slot-clear-btn" id="slot-clear-btn-0" title="Clear slot">Clear</button>
+            </div>
+            <div class="slot-search-wrapper" id="slot-search-wrapper-0">
+              <input type="text" id="slot-search-input-0" class="slot-search-input" placeholder="Search element (e.g. Copper, Cu, 29)...">
+              <div class="slot-dropdown" id="slot-dropdown-0"></div>
+            </div>
+            <div class="slot-selected-display" id="slot-selected-display-0"></div>
+          </div>
+
+          <div class="slot-card" id="slot-card-1">
+            <div class="slot-header">
+              <span class="slot-title">Element Slot 2</span>
+              <button type="button" class="slot-clear-btn" id="slot-clear-btn-1" title="Clear slot">Clear</button>
+            </div>
+            <div class="slot-search-wrapper" id="slot-search-wrapper-1">
+              <input type="text" id="slot-search-input-1" class="slot-search-input" placeholder="Search element (e.g. Silver, Ag, 47)...">
+              <div class="slot-dropdown" id="slot-dropdown-1"></div>
+            </div>
+            <div class="slot-selected-display" id="slot-selected-display-1"></div>
+          </div>
+
+          <div class="slot-card" id="slot-card-2">
+            <div class="slot-header">
+              <span class="slot-title">Element Slot 3</span>
+              <button type="button" class="slot-clear-btn" id="slot-clear-btn-2" title="Clear slot">Clear</button>
+            </div>
+            <div class="slot-search-wrapper" id="slot-search-wrapper-2">
+              <input type="text" id="slot-search-input-2" class="slot-search-input" placeholder="Search element (e.g. Gold, Au, 79)...">
+              <div class="slot-dropdown" id="slot-dropdown-2"></div>
+            </div>
+            <div class="slot-selected-display" id="slot-selected-display-2"></div>
+          </div>
+        </div>
+
+        <div class="comparison-table-wrapper">
+          <table class="comparison-table">
+            <thead id="comparison-thead">
+
+            </thead>
+            <tbody id="comparison-tbody">
+
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <div id="hover-preview-card" class="hover-preview-card" role="tooltip" aria-hidden="true">
+    <div class="preview-card-header">
+      <div class="preview-hero-main">
+        <div class="preview-symbol-badge">
+          <span class="preview-badge-sym">H</span>
+          <span class="preview-badge-num">1</span>
+        </div>
+        <div class="preview-meta-info">
+          <span class="preview-element-name">Hydrogen</span>
+          <span class="preview-element-category">Reactive Nonmetal</span>
+          <span class="preview-element-weight">Mass: 1.008 u</span>
+        </div>
+      </div>
+      <div class="preview-card-actions">
+        <button type="button" class="preview-action-btn preview-pin-btn" title="Pin / Unpin preview card">
+          <i class="fas fa-thumbtack"></i>
+        </button>
+        <button type="button" class="preview-action-btn preview-close-btn" title="Close preview">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+    <div class="preview-card-body">
+      <div class="preview-stat-item">
+        <span class="preview-stat-label">Phase at Temp</span>
+        <span class="preview-stat-val" id="preview-state">GAS</span>
+      </div>
+      <div class="preview-stat-item">
+        <span class="preview-stat-label">Period & Group</span>
+        <span class="preview-stat-val" id="preview-period-group">P: 1 | G: 1</span>
+      </div>
+      <div class="preview-stat-item preview-stat-full">
+        <span class="preview-stat-label">Electron Configuration</span>
+        <span class="preview-stat-val" id="preview-config">1s¹</span>
+      </div>
+      <div class="preview-stat-item">
+        <span class="preview-stat-label">Melting Point</span>
+        <span class="preview-stat-val" id="preview-melting">14.01 K</span>
+      </div>
+      <div class="preview-stat-item">
+        <span class="preview-stat-label">Boiling Point</span>
+        <span class="preview-stat-val" id="preview-boiling">20.28 K</span>
+      </div>
+      <div class="preview-stat-item">
+        <span class="preview-stat-label">Electronegativity</span>
+        <span class="preview-stat-val" id="preview-electroneg">2.20 Pauling</span>
+      </div>
+      <div class="preview-stat-item">
+        <span class="preview-stat-label">Density</span>
+        <span class="preview-stat-val" id="preview-density">0.0899 g/cm³</span>
+      </div>
+      <div class="preview-stat-item preview-stat-full">
+        <span class="preview-stat-label">Discovery &amp; History</span>
+        <span class="preview-stat-val discovery-val" id="preview-discoverer">H. Cavendish (1766)</span>
+      </div>
+    </div>
+    <div class="preview-card-footer">
+      <span style="font-size:0.75rem;color:var(--text-muted);"><i class="fas fa-circle-info"></i> Click tile to open full page</span>
+      <a href="#details?z=1" class="preview-details-btn">Full Profile &rarr;</a>
+    </div>
+  </div>
+
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div>
+          <div class="brand" style="font-size:1.15rem;">
+            <div class="brand-icon-wrapper" style="width:28px;height:28px;font-size:0.8rem;">
+              <i class="fas fa-atom"></i>
+            </div>
+            <span class="brand-title">ELEMENTA</span>
+          </div>
+          <p class="footer-brand-desc">
+            An advanced, responsive, and scientifically rigorous interactive periodic table of the chemical elements built adhering to IUPAC, NIST, and RSC standards.
+          </p>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Navigation</div>
+          <ul class="footer-links">
+            <li><a href="#table" class="footer-link">Periodic Table Grid</a></li>
+            <li><a href="#compare" class="footer-link">Element Comparison</a></li>
+            <li><a href="#details?z=1" class="footer-link">Element Details</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-title">Scientific References</div>
+          <ul class="footer-links">
+            <li><span class="footer-sources-tag"><i class="fas fa-microscope"></i> IUPAC Gold Book</span></li>
+            <li><span class="footer-sources-tag"><i class="fas fa-database"></i> NIST Standard Reference</span></li>
+            <li><span class="footer-sources-tag"><i class="fas fa-book"></i> CRC Handbook of Chemistry</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 ELEMENTA Chemistry Systems. All chemical properties verified.</div>
+        <div style="font-size:0.8rem;color:var(--text-muted);">
+          Crafted with pure HTML5, CSS3, & Vanilla JavaScript. Zero external build dependencies.
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/elements-data-1.js"></script>
+  <script src="js/elements-data-2.js"></script>
+  <script src="js/elements-data-3.js"></script>
+  <script src="js/elements.js"></script>
+  <script src="js/bohr-model.js"></script>
+  <script src="js/periodic-table.js"></script>
+  <script src="js/element-details.js"></script>
+  <script src="js/compare.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

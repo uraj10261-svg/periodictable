@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ELEMENTA | Element Details</title>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const z = params.get('z') || params.get('element') || '1';
+    window.location.replace(`index.html#details?z=${z}`);
+  </script>
+</head>
+<body style="background:#171C20;color:#F1F0E9;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;">
+  <p>Redirecting to <a href="index.html#details?z=1" style="color:#A8B2B6;">Element Details</a>...</p>
+</body>
+</html>

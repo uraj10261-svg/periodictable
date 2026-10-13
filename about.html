@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About &amp; Scientific Data Sources | ELEMENTA</title>
+  <meta name="description" content="Scientific methodology, IUPAC and NIST reference citations, data confidence classifications, and user guide for ELEMENTA.">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .about-section {
+      padding: 2.5rem 0 4rem;
+    }
+    .about-prose {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    .about-prose h1 {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+    }
+    .about-prose h2 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-top: 2.5rem;
+      margin-bottom: 0.85rem;
+      color: var(--text-primary);
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 0.5rem;
+    }
+    .about-prose h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+    .about-prose p {
+      color: var(--text-secondary);
+      font-size: 0.98rem;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+    .about-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .source-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .source-item {
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-secondary);
+      padding: 1rem 1.25rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+    }
+    .source-title {
+      font-weight: 700;
+      color: var(--text-primary);
+      font-size: 1rem;
+      margin-bottom: 0.25rem;
+    }
+    .source-desc {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+    .source-link {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .source-link:hover {
+      color: var(--text-primary);
+      text-decoration: underline;
+    }
+    .confidence-tag {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      border: 1px solid var(--border-subtle);
+    }
+    .confidence-tag.measured { background: var(--bg-secondary); border-color: #294A3A; color: #F1F0E9; }
+    .confidence-tag.reference { background: var(--bg-secondary); border-color: #2C4358; color: #F1F0E9; }
+    .confidence-tag.predicted { background: var(--bg-secondary); border-color: #66502D; color: #F1F0E9; }
+    .confidence-tag.unavailable { background: var(--bg-secondary); border-color: #343D42; color: #687176; }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-container">
+      <a href="index.html" class="brand" aria-label="ELEMENTA Home">
+        <div class="brand-icon-wrapper">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <circle cx="12" cy="12" r="3"/>
+            <ellipse cx="12" cy="12" rx="9" ry="4" transform="rotate(30 12 12)"/>
+            <ellipse cx="12" cy="12" rx="9" ry="4" transform="rotate(-30 12 12)"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">ELEMENTA</span>
+          <span class="brand-tagline">Periodic Platform</span>
+        </div>
+      </a>
+
+      <nav class="main-nav" aria-label="Main Navigation">
+        <a href="index.html" class="nav-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Periodic Table
+        </a>
+        <a href="compare.html" class="nav-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Compare Elements
+        </a>
+        <a href="about.html" class="nav-link active">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          About & Sources
+        </a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="theme-toggle-btn" title="Toggle Theme" aria-label="Toggle Theme">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        </button>
+        <button class="mobile-nav-toggle" title="Menu" aria-label="Open Navigation Menu" aria-expanded="false">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="about-section">
+    <div class="container">
+      <article class="about-prose">
+        <h1>About ELEMENTA &amp; Scientific Methodology</h1>
+        <p>
+          <strong>ELEMENTA</strong> is an interactive scientific platform and periodic table designed for students, educators, chemists, and physics researchers. Built with pure client-side web technologies (HTML5, CSS3, Vanilla ES6+ JavaScript), it operates entirely without external server dependencies, guaranteeing zero tracking and full offline reliability.
+        </p>
+
+        <h2>1. User Guide &amp; Key Features</h2>
+        
+        <h3>Interactive Periodic Table</h3>
+        <p>
+          The main periodic table presents all 118 officially recognized chemical elements in the standard 18-column, 7-period layout. The f-block elements (Lanthanides 57–71 and Actinides 89–103) are placed in two rows below the main body, with clear series placeholders at group 3 periods 6 and 7.
+        </p>
+
+        <h3>Hover &amp; Tap Previews</h3>
+        <p>
+          Moving the mouse cursor over any element tile activates an intelligent floating preview card. The card calculates viewport collisions dynamically, ensuring it never clips against the screen edge. You can pin the card open using the pin icon, allowing you to examine values while interacting with other elements. On touch devices, a single tap displays the preview card.
+        </p>
+
+        <h3>Live Search &amp; Auto-navigation</h3>
+        <p>
+          The search system operates in real time across element names, chemical symbols, and atomic numbers. Using the keyboard (Arrow Up, Arrow Down, Enter) allows rapid navigation through matching elements, smoothly scrolling the periodic table and focusing the selected tile.
+        </p>
+
+        <h3>Property Visualization (Heatmaps)</h3>
+        <p>
+          Selecting a physical quantity (such as atomic mass, density, melting point, boiling point, electronegativity, or atomic radius) switches the table into continuous heatmap mode. A scientific color ramp highlights periodic trends across groups and periods, with unavailable values clearly distinguished.
+        </p>
+
+        <h2>2. Scientific Interpretation of the Bohr Model</h2>
+        <div class="about-card">
+          <p>
+            Each element profile features an interactive SVG Bohr atomic model showing concentric electron shells (K, L, M, N, O, P, Q). The electron count per shell is calculated directly from the ground-state electron configuration.
+          </p>
+          <p style="margin-bottom:0;">
+            <em>Educational Disclaimer:</em> The Bohr model is a pedagogical semi-classical visualization. In contemporary quantum chemistry, electrons do not orbit in fixed circular tracks; rather, their spatial distribution is governed by Schrödinger wavefunctions representing three-dimensional probability density clouds (atomic orbitals).
+          </p>
+        </div>
+
+        <h2>3. Units and Measurement Conventions</h2>
+        <p>
+          To maintain strict scientific consistency, ELEMENTA follows standard International System of Units (SI) conventions:
+        </p>
+        <ul style="padding-left:1.5rem; color:var(--text-secondary); line-height:1.7;">
+          <li><strong>Atomic Weights:</strong> Expressed in unified atomic mass units (u or Da). For elements with no stable isotopes, the mass number of the longest-lived isotope is indicated in brackets [A].</li>
+          <li><strong>Temperatures:</strong> Expressed primarily in Kelvin (K), with Celsius (°C) equivalencies provided on profile pages. Standard reference conditions: 298.15 K (25 °C) and 101.325 kPa (1 atm).</li>
+          <li><strong>Densities:</strong> Expressed in grams per cubic centimeter (g/cm³) for solids and liquids at 293 K, or grams per liter (g/L) for gases at standard temperature and pressure.</li>
+          <li><strong>Electronegativity:</strong> Pauling dimensionless scale (values range from 0.7 for francium to 3.98 for fluorine).</li>
+          <li><strong>Ionization Energies:</strong> Expressed in kilojoules per mole (kJ/mol) for first valence electron extraction.</li>
+          <li><strong>Atomic Radii:</strong> Calculated and empirical radii expressed in picometers (pm).</li>
+        </ul>
+
+        <h2 id="sources">4. Authoritative Data Sources</h2>
+        <div class="source-list">
+          <div class="source-item">
+            <span class="source-title">IUPAC Periodic Table of the Elements</span>
+            <span class="source-desc">Official international authority on chemical nomenclature, terminology, and standard atomic weights.</span>
+            <a href="https://iupac.org/what-we-do/periodic-table-of-elements/" target="_blank" rel="noopener" class="source-link">
+              iupac.org/what-we-do/periodic-table-of-elements
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+            </a>
+          </div>
+
+          <div class="source-item">
+            <span class="source-title">NIST Physical Measurement Laboratory (Atomic Spectra Database)</span>
+            <span class="source-desc">National Institute of Standards and Technology ground state electron configurations and ionization energy levels.</span>
+            <a href="https://www.nist.gov/pml/atomic-spectra-database" target="_blank" rel="noopener" class="source-link">
+              nist.gov/pml/atomic-spectra-database
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+            </a>
+          </div>
+
+          <div class="source-item">
+            <span class="source-title">Royal Society of Chemistry (RSC) Periodic Table</span>
+            <span class="source-desc">Historical discovery records, verified element applications, and thermodynamic constants.</span>
+            <a href="https://www.rsc.org/periodic-table" target="_blank" rel="noopener" class="source-link">
+              rsc.org/periodic-table
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+            </a>
+          </div>
+
+          <div class="source-item">
+            <span class="source-title">PubChem Compound and Element Database (NCBI)</span>
+            <span class="source-desc">Comprehensive open chemistry database providing CAS Registry Numbers and bioactivity references.</span>
+            <a href="https://pubchem.ncbi.nlm.nih.gov/periodic-table/" target="_blank" rel="noopener" class="source-link">
+              pubchem.ncbi.nlm.nih.gov/periodic-table
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <h2>5. Missing Data Conventions &amp; Confidence</h2>
+        <p>
+          For transuranic and superheavy elements (elements 104 through 118), macroscopic quantities have never been synthesized; many exist only for fractions of a second in particle accelerators. In these instances, ELEMENTA marks properties as:
+        </p>
+        <ul style="padding-left:1.5rem; color:var(--text-secondary); line-height:1.7;">
+          <li><span class="confidence-tag measured">Measured</span>: Experimentally determined value with reproducible peer-reviewed results.</li>
+          <li><span class="confidence-tag reference">Reference</span>: Standard internationally accepted convention (e.g. Pauling scale, atomic mass standards).</li>
+          <li><span class="confidence-tag predicted">Predicted</span>: Value calculated via relativistic Dirac-Fock quantum chemical models.</li>
+          <li><span class="confidence-tag unavailable">Unavailable</span>: Value is neither measured nor reliably projected; displayed as null/unavailable rather than inventing synthetic numbers.</li>
+        </ul>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <div>© ELEMENTA Science Project. All 118 element records verified.</div>
+        <a href="index.html" class="footer-link">Back to Periodic Table</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/theme.js"></script>
+</body>
+</html>
